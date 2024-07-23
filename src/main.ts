@@ -1,31 +1,56 @@
-import * as Three from 'three';
+import * as THREE from 'three';
 
-//initial size
+// Canvas
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+const windowWidth = window.innerWidth;
+const windowHeight = window.innerHeight;
+// Scene
+const scene = new THREE.Scene();
 
-//Scene
-const scene = new Three.Scene();
+/**
+ * Objects
+ */
+const group = new THREE.Group();
+group.position.y = 1;
+group.scale.y = 1;
+group.rotation.y = 1;
+scene.add(group);
 
-//Red Cube
-const geometry = new Three.BoxGeometry(1, 1, 1);
-const material = new Three.MeshBasicMaterial({ color: 'red' });
-const mesh = new Three.Mesh(geometry, material);
-scene.add(mesh);
+const cube1 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+const cube2 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
+const cube3 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xff00ff }));
+group.add(cube1);
+cube1.position.x = 2;
+group.add(cube2);
+cube2.position.x = -2;
+group.add(cube3);
 
-const sizes = { width: 800, height: 600 };
+// Axes Helper
+const axesHelper = new THREE.AxesHelper();
+scene.add(axesHelper);
 
-//Camera
-const camera = new Three.PerspectiveCamera(75, sizes.width / sizes.height);
-camera.position.z = 3;
-camera.position.x = 0.5;
-camera.position.y = 0.2;
+/**
+ * Sizes
+ */
+const sizes = {
+	width: windowWidth,
+	height: windowHeight,
+};
+
+/**
+ * Camera
+ */
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
+camera.position.set(0, 0, 3);
 scene.add(camera);
 
-// Renderer
-const renderer = new Three.WebGLRenderer({
-	canvas,
+//camera.lookAt(mesh.position);
+
+/**
+ * Renderer
+ */
+const renderer = new THREE.WebGLRenderer({
+	canvas: canvas,
 });
-
 renderer.setSize(sizes.width, sizes.height);
-
 renderer.render(scene, camera);
