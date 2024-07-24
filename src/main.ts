@@ -1,56 +1,51 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
 
 // Canvas
 const canvas = document.querySelector('canvas') as HTMLCanvasElement;
-const windowWidth = window.innerWidth;
-const windowHeight = window.innerHeight;
+
 // Scene
 const scene = new THREE.Scene();
 
-/**
- * Objects
- */
-const group = new THREE.Group();
-group.position.y = 1;
-group.scale.y = 1;
-group.rotation.y = 1;
-scene.add(group);
+// Object
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
-const cube1 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
-const cube2 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0x00ff00 }));
-const cube3 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial({ color: 0xff00ff }));
-group.add(cube1);
-cube1.position.x = 2;
-group.add(cube2);
-cube2.position.x = -2;
-group.add(cube3);
-
-// Axes Helper
-const axesHelper = new THREE.AxesHelper();
-scene.add(axesHelper);
-
-/**
- * Sizes
- */
+// Sizes
 const sizes = {
-	width: windowWidth,
-	height: windowHeight,
+	width: window.innerWidth,
+	height: window.innerHeight,
 };
 
-/**
- * Camera
- */
+// Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
-camera.position.set(0, 0, 3);
+camera.position.z = 3;
 scene.add(camera);
 
-//camera.lookAt(mesh.position);
-
-/**
- * Renderer
- */
+// Renderer
 const renderer = new THREE.WebGLRenderer({
 	canvas: canvas,
 });
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+
+//Clock
+//const clock = new THREE.Clock();
+gsap.to(mesh.position, { duration: 1, delay: 1, x: 2 });
+
+//Animation
+const tick = () => {
+	//Time
+	//const elapsedtime = clock.getElapsedTime();
+
+	//Update Object
+	//camera.position.y = Math.sin(elapsedtime);
+	//camera.position.x = Math.cos(elapsedtime);
+	//camera.lookAt(mesh.position);
+	//Render
+	renderer.render(scene, camera);
+	window.requestAnimationFrame(tick);
+};
+
+tick();
